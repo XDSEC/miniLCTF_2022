@@ -1,0 +1,35 @@
+FROM ubuntu:18.04
+
+RUN sed -i "s/http:\/\/archive.ubuntu.com/http:\/\/mirrors.tuna.tsinghua.edu.cn/g" /etc/apt/sources.list && \
+    apt-get update && apt-get -y dist-upgrade && \
+    apt-get install -y lib32z1 xinetd
+
+RUN useradd -m minil
+
+WORKDIR /home/minil
+
+RUN cp -R /lib* /home/minil && \
+    cp -R /usr/lib* /home/minil
+
+RUN mkdir /home/minil/dev && \
+    mknod /home/minil/dev/null c 1 3 && \
+    mknod /home/minil/dev/zero c 1 5 && \
+    mknod /home/minil/dev/random c 1 8 && \
+    mknod /home/minil/dev/urandom c 1 9 && \
+    chmod 666 /home/minil/dev/*
+
+RUN mkdir /home/minil/bin && \
+    cp /bin/sh /home/minil/bin && \
+    cp /bin/ls /home/minil/bin && \
+    cp /bin/cat /home/minil/bin
+
+COPY ./start.sh /start.sh
+
+RUN chmod +x /start.sh
+
+COPY ./easy-http /home/minil/
+RUN chown -R root:minil /home/minil && \
+    chmod -R 750 /home/minil 
+
+CMD ["/start.sh"]
+EXPOSE 2048

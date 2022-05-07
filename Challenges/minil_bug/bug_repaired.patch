@@ -1,0 +1,23 @@
+diff --git a/src/vm.c b/src/vm.c
+index 6d52d76..e7788c0 100644
+--- a/src/vm.c
++++ b/src/vm.c
+@@ -117,10 +117,18 @@ void vm_exec(VM *vm, int startip, bool trace)
+                 break;
+             case LOAD: // load local or arg
+                 offset = vm->code[ip++];
++                if(offset<0){
++                    fprintf(stderr, "Invalid offset:%d\n", offset);
++                    break;
++                }
+                 vm->stack[++sp] = vm->call_stack[callsp].locals[offset];
+                 break;
+             case GLOAD: // load from global memory
+                 addr = vm->code[ip++];
++                if(addr<0){
++                    fprintf(stderr, "Invalid addr:%d\n", addr);
++                    break;
++                }
+                 vm->stack[++sp] = vm->globals[addr];
+                 break;
+             case STORE:

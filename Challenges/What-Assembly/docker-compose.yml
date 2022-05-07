@@ -1,0 +1,9 @@
+version: '3'
+services:
+  flag_tag:
+    build: .
+    container_name: flag_tag
+    ports:
+      - "8080:80"
+    restart: always
+    entrypoint: /etc/init.sh

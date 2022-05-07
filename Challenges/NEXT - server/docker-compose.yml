@@ -1,0 +1,8 @@
+version: '3'
+services:
+  next:
+    build: .
+    container_name: next
+    ports:
+      - "10001:10001"
+    restart: always

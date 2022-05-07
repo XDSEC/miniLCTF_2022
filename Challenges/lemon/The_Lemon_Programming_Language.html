@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang xml:lang>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Zhicheng Wei" />
+  <meta name="dcterms.date" content="2017-11-08" />
+  <title>The Lemon Programming Language</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.line-block{white-space: pre-line;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+
+
+
+div#header, header
+{
+
+border-bottom: 1px solid #aaa;
+margin-bottom: 0.5em;
+}
+.title 
+{
+text-align: center;
+}
+.author, .date 
+{
+text-align: center;
+}
+
+div#TOC, nav#TOC
+{
+
+border-bottom: 1px solid #aaa;
+margin-bottom: 0.5em;
+}
+@media print
+{
+div#TOC, nav#TOC
+{
+
+display: none;
+}
+}
+
+h1, h2, h3, h4, h5, h6
+{
+font-family: "Helvetica Neue", Helvetica, "Liberation Sans", Calibri, Arial, sans-serif; 
+
+page-break-after: avoid; 
+}
+
+div div, section section 
+{
+margin-left: 2em; 
+}
+p {}
+blockquote
+{ font-style: italic;
+}
+li 
+{
+}
+li > p 
+{
+margin-top: 1em; 
+}
+ul 
+{
+}
+ul li 
+{
+}
+ol 
+{
+}
+ol li 
+{
+}
+hr {}
+
+sub 
+{
+}
+sup 
+{
+}
+em 
+{
+}
+em > em 
+{
+font-style: normal;
+}
+strong 
+{
+}
+
+a 
+{
+
+text-decoration: none;
+}
+@media screen
+{
+a:hover
+{
+
+text-decoration: underline;
+}
+}
+@media print
+{
+a {
+
+color: black;
+background: transparent;
+}
+a[href^="http://"]:after, a[href^="https://"]:after
+{
+
+content: " (" attr(href) ") ";
+font-size: 90%;
+}
+}
+
+img
+{
+
+vertical-align: middle;
+}
+div.figure 
+{
+
+margin-left: auto;
+margin-right: auto;
+text-align: center;
+font-style: italic;
+}
+p.caption 
+{
+
+}
+
+pre, code {
+background-color: #fdf7ee;
+
+
+
+white-space: pre-wrap; 
+white-space: -moz-pre-wrap !important; 
+white-space: -pre-wrap; 
+white-space: -o-pre-wrap; 
+word-wrap: break-word; 
+
+}
+pre 
+{
+
+padding: 0.5em; 
+border-radius: 5px; 
+
+border: 1px solid #aaa;
+
+margin-left: 0.5em;
+margin-right: 0.5em;
+}
+@media screen
+{
+pre
+{
+
+white-space: pre;
+overflow: auto;
+
+border: 1px dotted #777;
+}
+}
+code 
+{
+}
+p > code, li > code 
+{
+
+padding-left: 2px;
+padding-right: 2px;
+}
+li > p code 
+{
+
+padding: 2px;
+}
+
+span.math 
+{
+
+}
+div.math 
+{
+}
+span.LaTeX 
+{
+} eq 
+{
+} 
+
+table
+{
+border-collapse: collapse;
+border-spacing: 0; 
+border-bottom: 2pt solid #000;
+border-top: 2pt solid #000; 
+
+margin-left: auto;
+margin-right: auto;
+}
+thead 
+{
+border-bottom: 1pt solid #000;
+background-color: #eee; 
+}
+tr.header 
+{
+} tbody 
+{
+}
+
+tr {
+}
+tr.odd:hover, tr.even:hover 
+{
+background-color: #eee;
+}
+
+tr.odd {}
+tr.even {}
+td, th 
+{ vertical-align: top; 
+vertical-align: baseline; 
+padding-left: 0.5em;
+padding-right: 0.5em;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+}
+
+
+th 
+{
+font-weight: bold; }
+tfoot 
+{
+}
+caption 
+{
+caption-side: top;
+border: none;
+font-size: 0.9em;
+font-style: italic;
+text-align: center;
+margin-bottom: 0.3em; 
+padding-bottom: 0.2em;
+}
+
+dl 
+{
+border-top: 2pt solid black;
+padding-top: 0.5em;
+border-bottom: 2pt solid black;
+}
+dt 
+{
+font-weight: bold;
+}
+dd+dt 
+{
+border-top: 1pt solid black;
+padding-top: 0.5em;
+}
+dd 
+{
+margin-bottom: 0.5em;
+}
+dd+dd 
+{
+border-top: 1px solid black; 
+}
+
+a.footnote, a.footnoteRef { 
+font-size: small; vertical-align: text-top;
+}
+a[href^="#fnref"], a.reversefootnote 
+{
+}
+@media print
+{
+a[href^="#fnref"], a.reversefootnote 
+{
+
+display: none;
+}
+}
+div.footnotes 
+{
+}
+div.footnotes li[id^="fn"] 
+{
+}
+
+@media print
+{
+.noprint
+{
+display:none;
+}
+}
+</style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header>
+<h1 class="title">The Lemon Programming Language</h1>
+<p class="author">Zhicheng Wei</p>
+<p class="date">2017-11-08</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#part-i---basic-part">Part I - Basic Part</a><ul>
+<li><a href="#chapter-1---overview">Chapter 1 - Overview</a></li>
+<li><a href="#chapter-2---variables-and-types">Chapter 2 - Variables and Types</a></li>
+<li><a href="#chapter-3---collection-types">Chapter 3 - Collection Types</a></li>
+<li><a href="#chapter-4---operators-and-expressions">Chapter 4 - Operators and Expressions</a></li>
+<li><a href="#chapter-5---control-flow">Chapter 5 - Control Flow</a></li>
+<li><a href="#chapter-6---function">Chapter 6 - Function</a></li>
+<li><a href="#chapter-7---class">Chapter 7 - Class</a></li>
+<li><a href="#chapter-8---exception">Chapter 8 - Exception</a></li>
+<li><a href="#chapter-9---import">Chapter 9 - Import</a></li>
+</ul></li>
+<li><a href="#part-ii---advance-part">Part II - Advance Part</a><ul>
+<li><a href="#chapter-10---accessor">Chapter 10 - Accessor</a></li>
+<li><a href="#chapter-11---iterator">Chapter 11 - Iterator</a></li>
+<li><a href="#chapter-12---coroutine">Chapter 12 - Coroutine</a></li>
+<li><a href="#chapter-13---continuation">Chapter 13 - Continuation</a></li>
+</ul></li>
+<li><a href="#part-iii---the-c-api">Part III - The C API</a><ul>
+<li><a href="#chapter-14---input-and-compile">Chapter 14 - Input and Compile</a></li>
+<li><a href="#chapter-15---the-virtual-machine">Chapter 15 - The Virtual Machine</a></li>
+<li><a href="#chapter-16---create-function-and-type">Chapter 16 - Create Function and Type</a></li>
+</ul></li>
+</ul>
+</nav>
+<h2 id="part-i---basic-part">Part I - Basic Part</h2>
+<h3 id="chapter-1---overview">Chapter 1 - Overview</h3>
+<h4 id="get-source-code-and-build">1.1 Get source code and build</h4>
+<p>Lemon using git management source code, you can learn about git from <a href="http://git-scm.org">git-scm.org</a>.</p>
+<pre><code>$ git checkout git@github.com:lemon-lang/lemon.git</code></pre>
+<p>then inside lemon’s source code folder run</p>
+<pre><code>$ make</code></pre>
+<p>if build success, have <code>lemon</code> and <code>liblemon.so</code>, <code>lemon</code> is execute file, <code>liblemon.so</code> is required runtime lib.</p>
+<p>Windows platform need <a href="http://tdm-gcc.tdragon.net/download">TDM-GCC</a> tool.</p>
+<pre><code>mingw32-make</code></pre>
+<h4 id="build-options">1.2 Build Options</h4>
+<p>In the build phase, have some options you can use.</p>
+<ul>
+<li><code>DEBUG</code>, debug compiler flags, 0 is off.</li>
+<li><code>STATIC</code>, 0 build with dynamic-linked library, 1 build with static-linked.</li>
+<li><code>USE_MALLOC</code>, stdlib’s malloc ensure return aligned pointer</li>
+<li><code>MODULE_OS</code>, POSIX builtin os library</li>
+<li><code>MODULE_SOCKET</code>, BSD Socket builtin library</li>
+</ul>
+<p>default build also can use with options:</p>
+<pre><code>$ make DEBUG=0 STATIC=0 USE_MALLOC=0 MODULE_OS=1 MODULE_SOCKET=1</code></pre>
+<p>The most important is STATIC options, if STATIC = 1, then build without liblemon.so instead liblemon.a, and the lemon execute file can’t run lemon source that’s import dynamic library from C.</p>
+<h4 id="run-lemon">1.3 Run lemon</h4>
+<p>run lemon from source.</p>
+<pre><code>$ ./lemon lemon.lm</code></pre>
+<p>or run lemon shell</p>
+<pre><code>$ ./lemon
+Lemon Version 0.0.1
+Copyright 2017 Zhicheng Wei
+Type '\help' for more information, '\exit' or ^D exit
+
+&gt;&gt;&gt; </code></pre>
+<h4 id="print-stuff">1.4 Print stuff</h4>
+<p>print ‘hello,world’ from lemon shell, <code>print</code> can print any lemon object.</p>
+<pre><code>&gt;&gt;&gt; print('hello,world');
+hello,world
+&gt;&gt;&gt; </code></pre>
+<h3 id="chapter-2---variables-and-types">Chapter 2 - Variables and Types</h3>
+<h4 id="variable-declare.">2.1 Variable declare.</h4>
+<p>lemon is dynamic type language, declare a variable just use keyword <code>var</code>, example</p>
+<pre><code>var a;</code></pre>
+<p>you can set variable’s value at declare, example</p>
+<pre><code>var a = 100;</code></pre>
+<p>you can declare multiple variable at once, example</p>
+<pre><code>var a, b, c;</code></pre>
+<p>multiple variable declare can’t set value.</p>
+<h4 id="value-types">2.2 Value Types</h4>
+<h5 id="integer">2.2.1 integer</h5>
+<p>Integer is basic type of lemon, It’s represent any integer from very little to very big. The whole integer range limit is depends on memory, example</p>
+<pre><code>100;
+18446744073709551616;
+340282366920938463463374607431768211456;</code></pre>
+<p>all validate integer.</p>
+<h5 id="number">2.2.2 number</h5>
+<p>Number is float pointer, lemon’s implement number use double, example</p>
+<pre><code>10.1;
+.5;</code></pre>
+<h5 id="string">2.2.3 string</h5>
+<p>String is array of byte, define string within <code>'</code> or <code>&quot;</code>, example</p>
+<pre><code>'hello,world'
+&quot;hello,world&quot;</code></pre>
+<p>String use escape to encode special char, example</p>
+<ul>
+<li><code>\t</code> Horizontal Tab</li>
+<li><code>\n</code> Line Feed</li>
+<li><code>\r</code> Carriage Return</li>
+</ul>
+<p>Methods of string object</p>
+<ul>
+<li><code>upper()</code> return a copy of the string converted to uppercase. example, <code>'Hello,World'.upper()</code> -&gt; <code>'HELLO,WORLD'</code>.</li>
+<li><code>lower()</code> return a copy of the string converted to uppercase. <code>'Hello,World'.lower()</code> -&gt; <code>'hello,world'</code>.</li>
+<li><code>trim()</code> return a copy of the string with leading and trailing whitespace removed. example, <code>' Hello,World '.trim()</code> -&gt; <code>Hello,World</code>.</li>
+<li><code>ltrim()</code> return a copy of the string with leading whitespace removed. example, <code>' Hello,World '.ltrim()</code> -&gt; <code>Hello,World</code>.</li>
+<li><code>rtrim()</code> return a copy of the string with trailing whitespace removed. example, <code>' Hello,World '.trim()</code> -&gt; <code>Hello,World</code>.</li>
+<li><code>find(substring)</code> return lowest index of substring in string. example, <code>'Hello,World'.find('l')</code> -&gt; <code>2</code>.</li>
+<li><code>rfind(substring)</code> return highest index of substring in string. example, <code>'Hello,World'.find('l')</code> -&gt; <code>9</code>.</li>
+<li><code>replace(old, new)</code> return a copy of string replaced every old in string to new. example, <code>'Hello,World'.replace('l', '1');</code> -&gt; <code>'He11o,Wor1d'</code>.</li>
+<li><code>split(delimiter)</code> return an array split by delimiter. example, <code>'Hello,World'.split(',')</code> -&gt; <code>['Hello', 'World']</code></li>
+<li><code>join(iterable)</code> return a string which is the concatenation of the strings in the iterable, example <code>','.join(['Hello', 'World'])</code> -&gt; <code>'Hello,World'</code>.</li>
+<li><code>format()</code> return a string of replace placeholder <code>{}</code> to arguments, example <code>'Hello, {}'.format('World')</code> -&gt; <code>'Hello, World'</code>.</li>
+<li><code>startswith(prefix)</code> return true if prefix is string’s prefix, otherwise return false, example <code>'Hello,World'.startswith('Hello')</code> -&gt; <code>true</code></li>
+<li><code>endswith(suffix)</code> return true if suffix is string’s suffix, otherwise return false, example <code>'Hello,World'.endswith('World')</code> -&gt; <code>true</code></li>
+</ul>
+<h5 id="true-false">2.2.4 true false</h5>
+<p>boolean value <code>true</code> <code>false</code>, and other type can be <code>false</code>,example</p>
+<pre><code>nil
+0
+''
+[]
+{}</code></pre>
+<h6 id="nil-and-sentinel">2.2.5 nil and sentinel</h6>
+<p><code>nil</code> is a value represent for nothing, It’s variable default value and function default return value.</p>
+<p><code>sentinel</code> is another value represent for nothing, but <code>sentinel</code> is mean’s stop or non-exist value, like stop a iterator or delete a key from dictionary.</p>
+<h5 id="assign-and-unpack">2.3 Assign and Unpack</h5>
+<p>Variable use <code>=</code> assign a value, and lemon is a dynamic type language, you can assign any value to variable, example</p>
+<pre><code>a = 10;
+a = 'hello';
+a = 0.0;</code></pre>
+<p>Lemon also support array unpack, you can assign multiple variable at once, example</p>
+<pre><code>a, b, c = [10, 'hello', 0.0];</code></pre>
+<p>Variable <code>a</code> is <code>10</code>, variable b is <code>'hello'</code> and variable <code>c</code> is <code>0.0</code>.</p>
+<p>If array unpack items short then variables, rest variable assign to <code>nil</code>, example</p>
+<pre><code>a, b, c = [10, 'hello'];</code></pre>
+<p>Variable <code>a</code> is <code>10</code>, variable <code>b</code> is <code>'hello'</code> and variable <code>c</code> is <code>nil</code>;</p>
+<p>If variables short then array unpack items, rest items will discard, example</p>
+<pre><code>a, b, c = [10, 'hello', 0.0, 'world'];</code></pre>
+<p>Variable <code>a</code> is <code>10</code>, variable <code>b</code> is <code>'hello'</code> and variable <code>c</code> is <code>0.0</code>, <code>'world'</code> is discard.</p>
+<h3 id="chapter-3---collection-types">Chapter 3 - Collection Types</h3>
+<h4 id="value-type-and-reference-type">3.1 Value type and Reference type</h4>
+<p>Last chapter we talk about lemon’s basic type, like integer, number and string, those type are also <strong>value type</strong>. That mean’s those type are readonly, they shouldn’t have function update in place. And this chapter’s we talk type is <strong>reference type</strong>, those type is also a container of other values, you can add or delete item from those types.</p>
+<h4 id="array">3.2 Array</h4>
+<p>Array is a collection of elements, each element with a start with 0 index, represent element’s position, example</p>
+<pre><code>a = ['a', 'b', 'c', 'd'];</code></pre>
+<p>Variable <code>a</code> is an array with elements <code>'a'</code>, <code>'b'</code>, <code>'c'</code> and <code>'d'</code> in this specific ordered.</p>
+<p>Access array’s elements with index, example <code>a[0]</code> is ‘a’, <code>a[1]</code> is ‘b’. or use negative index, then index of element is array’s length + negative index, example <code>a[-1]</code> is ‘d’, <code>a[-2]</code> is ‘c’.use <code>a[0] = 10</code> to set an item with index.</p>
+<p>If an index large then or equal array’s length, array will throw an exception, example</p>
+<pre><code>&lt;ItemError('['a', 'b', 'c', 'd']' index out of range)&gt; </code></pre>
+<p>Get bulk elements from array, example <code>a[0:2]</code> is <code>['a', 'b']</code>, get all elements index &gt;= 0 and index &lt; 2. Starts with 0, 0 can ignore.<code>a[0:2]</code> is same as <code>a[:2]</code>.</p>
+<p>Methods of array</p>
+<ul>
+<li><code>append(obj)</code> add obj to array’s tail, example <code>a.append('e');</code> a become <code>['a', 'b', 'c', 'd', 'e']</code>.</li>
+<li><code>pop()</code> return array last element and delete it from array, example <code>a.pop()</code>, return ‘d’ and a become <code>['a', 'b', 'c']</code> (a was <code>['a', 'b', 'c', 'd']</code>).</li>
+<li><code>__length__()</code> function, get count of elements in array, example <code>a.__length__()</code> return <code>4</code> (a was <code>['a', 'b', 'c', 'd']</code>).</li>
+</ul>
+<h4 id="dictionary">3.3 Dictionary</h4>
+<p>Dictionary is a collection of elements, every element has a key, Items in dictionary is orderless, example</p>
+<pre><code>a = {'a': 1, 'b': 2', 'c': 3, 'd': 4}</code></pre>
+<p>Get elements with key, example</p>
+<pre><code>a['a'];</code></pre>
+<p>Set elements with key, example</p>
+<pre><code>a['a'] = 10;</code></pre>
+<p>Delete elements from key, example</p>
+<pre><code>delete a['a'];</code></pre>
+<p>Method of dictionary</p>
+<ul>
+<li><code>keys()</code> return a array of all keys from dictionary, example <code>a.keys()</code> -&gt; <code>['a', 'b', 'c', 'd']</code>.</li>
+</ul>
+<h3 id="chapter-4---operators-and-expressions">Chapter 4 - Operators and Expressions</h3>
+<h4 id="arithmetic-operators">4.1 Arithmetic Operators</h4>
+<ul>
+<li><code>+</code> add operator, example <code>5 + 2</code> result is <code>7</code></li>
+<li><code>-</code> minus operator, example <code>5 - 2</code> result is <code>3</code></li>
+<li><code>*</code> times operator, example <code>5 * 2</code> result is <code>10</code></li>
+<li><code>/</code> divide operator, example <code>5 / 2</code> result is <code>2</code></li>
+<li><code>%</code> mod operator, example <code>5 % 2</code> result is <code>1</code></li>
+<li><code>&lt;&lt;</code> left shift operator, example <code>5 &lt;&lt; 2</code> result is <code>20</code></li>
+<li><code>&gt;&gt;</code> right shift operator, example <code>5 &gt;&gt; 2</code> result is <code>1</code></li>
+<li><code>~</code> binary not operator, example <code>~5</code> result is <code>-6</code></li>
+<li><code>|</code> binary or operator, example <code>5 | 2</code> result is <code>7</code></li>
+<li><code>&amp;</code> binary and operator, example <code>5 &amp; 2</code> result is <code>0</code></li>
+</ul>
+<p>If both left and and right operand is integer then result is integer. if one operand is number other is integer then result will be a number.</p>
+<p>Number is not support <code>&lt;&lt;</code>, <code>&gt;&gt;</code>, <code>~</code>, <code>|</code> and <code>&amp;</code> operator.</p>
+<p>String support <code>+</code> operator, example <code>'hello' + 'world'</code> result is <code>'helloworld'</code>.</p>
+<h4 id="relational-and-logical-operators">4.2 Relational and Logical Operators</h4>
+<ul>
+<li><code>&lt;</code> less then operator, example <code>1 &lt; 2</code> result is <code>true</code></li>
+<li><code>&lt;=</code> less then or equal operator, example <code>1 &lt;= 2</code> result is <code>true</code>, <code>2 &lt;= 2</code> result is <code>true</code></li>
+<li><code>==</code> equal operator, example <code>1 == 2</code> result is <code>false</code>, <code>2 == 2</code> result is <code>true</code></li>
+<li><code>&gt;=</code> large then or equal operator, example <code>1 &gt;= 2</code> result is <code>false</code></li>
+<li><code>&gt;</code> large then operator, example <code>1 &gt; 2</code> result is <code>false</code></li>
+<li><code>||</code> logical or operator, example <code>0 || 1</code> result is <code>1</code></li>
+<li><code>&amp;&amp;</code> logical and operator, example <code>1 &amp;&amp; 0</code> result is <code>0</code></li>
+<li><code>!</code> logical not operator, example <code>!1</code> result is <code>false</code>.</li>
+</ul>
+<p><code>||</code>, <code>&amp;&amp;</code> and <code>!</code> is short-circuit evaluation, once operator has certain value, It stop evaluation rest expression, example <code>1 || func()</code> the func() will never execute.</p>
+<p>All object support <code>==</code>, <code>||</code>, <code>&amp;&amp;</code> and <code>!</code>. only integer and number support compare operator.</p>
+<h4 id="assignment-operators-and-expressions">4.3 Assignment Operators and Expressions</h4>
+<ul>
+<li><code>+=</code> add and assign, example <code>a += 1</code> result is <code>a = a + 1</code></li>
+<li><code>-=</code> minus and assign, example <code>a -= 1</code> result is <code>a = a - 1</code></li>
+<li><code>*=</code> times and assign, example <code>a *= 2</code> result is <code>a = a * 2</code></li>
+<li><code>/=</code> divide and assign, example <code>a /= 2</code> result is <code>a = a / 2</code></li>
+<li><code>%=</code> mod and assign, example <code>a %= 2</code> result is <code>a = a % 2</code></li>
+<li><code>&lt;&lt;=</code> left shift and assign, example <code>a &lt;&lt;= 2</code> result is <code>a = a &lt;&lt; 2</code></li>
+<li><code>&gt;&gt;=</code> right shift and assign, example <code>a &gt;&gt;= 2</code> result is <code>a = a &gt;&gt; 2</code></li>
+</ul>
+<h4 id="conditional-expressions">4.4 Conditional Expressions</h4>
+<ul>
+<li><code>?:</code> conditional expression, example <code>a &gt; b ? a : b</code> if <code>a &gt; b</code> result is <code>a</code>, otherwise result is <code>b</code></li>
+</ul>
+<h4 id="in-expressions">4.5 In Expressions</h4>
+<ul>
+<li><code>in</code> in expression, example <code>1 in [1,2,3,4]</code> result is <code>true</code></li>
+</ul>
+<h3 id="chapter-5---control-flow">Chapter 5 - Control Flow</h3>
+<h4 id="if-else">5.1 if-else</h4>
+<p>Syntax</p>
+<pre><code>if (condition) {
+    block_stmt1
+} else {
+    block_stmt2
+}</code></pre>
+<p>If <code>condition</code> expression is <code>true</code>, run <code>block_stmt1</code>, otherwise run <code>block_stmt2</code>. Else part is optional, example</p>
+<pre><code>if (condition) {
+    block_stmt1
+}</code></pre>
+<p>The <code>block_stmt1</code> only run when <code>condition</code> expression is <code>true</code>.</p>
+<p>If-else can nested use, example</p>
+<pre><code>if (condition1) {
+    block_stmt1
+} else {
+    if (condition2)  {
+        block_stmt2
+    } else {
+        block_stmt3
+    }
+}</code></pre>
+<p>When <code>condition1</code> is <code>true</code>, run block_stmt1, block_stmt2 and block_stmt3 not run. When <code>condition1</code> is <code>false</code> and <code>condition2</code> is <code>true</code>, block_stmt2 run. When both <code>condition1</code> and <code>condition2</code> is <code>false</code>, <code>block_stmt3</code> run.</p>
+<h4 id="else-if">5.2 else-if</h4>
+<p>Nesting if-else-if-else have a short version, example</p>
+<pre><code>if (condition1) {
+    block_stmt1
+} else {
+    if (condition2)  {
+        block_stmt2
+    } else {
+        block_stmt3
+    }
+}</code></pre>
+<p>Short version</p>
+<pre><code>if (condition1) {
+    block_stmt1
+} else if (condition2)  {
+    block_stmt2
+} else {
+    block_stmt3
+}</code></pre>
+<h4 id="while-loop">5.3 while loop</h4>
+<p>Syntax</p>
+<pre><code>while (condition) {
+    block_stmt1
+}</code></pre>
+<p>When <code>condition</code> is <code>true</code>, the <code>block_stmt1</code> run repeatly until <code>condition</code> become <code>false</code>.</p>
+<h4 id="for-loop">5.4 for loop</h4>
+<p>Syntax</p>
+<pre><code>for (init_expr; cond_expr; step_expr) {
+    block_stmt1
+}</code></pre>
+<p>The for-loop will result follow steps,</p>
+<ol type="1">
+<li>Evalution <code>init_expr</code></li>
+<li>When <code>cond_expr</code> is <code>true</code>, run block_stmt1, else exit loop.</li>
+<li>Evalution <code>step_expr</code> and goto step 2.</li>
+</ol>
+<p>The <code>init_expr</code> support declare statement, and <code>step_expr</code> support assign statement, example</p>
+<pre><code>for (var a = 0; a &lt; 100; a += 1) {
+    print(a);
+}</code></pre>
+<h4 id="for-in-loop">5.5 for-in loop</h4>
+<p>Syntax</p>
+<pre><code>for (variable in expr) {
+    block_stmt1
+}</code></pre>
+<p>The <code>expr</code> must return an iterable object, the variable will assign iterable object’s elements from first to last, and each time run <code>block_stmt1</code>.</p>
+<p>Variable support declare, example</p>
+<pre><code>for (var a in items) {
+    print(a);
+}</code></pre>
+<h4 id="break-and-continue">5.6 break and continue</h4>
+<p>Break statement will exit whole loop, example,</p>
+<pre><code>for (var i = 0; i &lt; 10; i+=1) {
+    if (i == 5) {
+        break;
+    }
+    print(i);
+}</code></pre>
+<p>The loop will exit when <code>i == 5</code> is <code>true</code>.</p>
+<p>Continue statement will exit current repeat,example</p>
+<pre><code>for (var i = 0; i &lt; 10; i+=1) {
+    if (i == 5) {
+        continue;
+    }
+    print(i);
+}</code></pre>
+<p>output</p>
+<pre><code>1
+2
+3
+4
+6
+7
+8
+9</code></pre>
+<p>The continue skip print when <code>i == 5</code> is <code>true</code>.</p>
+<h3 id="chapter-6---function">Chapter 6 - Function</h3>
+<h4 id="define-function">6.1 Define Function</h4>
+<p>Syntax</p>
+<pre><code>def name(var a, var b = 0) {
+    block_stmt
+}</code></pre>
+<p>Name is function’s name, <code>block_stmt</code> is function body, <code>a</code> is required parameter and <code>b</code> is optional parameter.</p>
+<p>Call a function, example</p>
+<ul>
+<li><code>name(1)</code> only pass required parameter,</li>
+<li><code>name(1, 2)</code> pass two parameters,</li>
+<li><code>name(a = 1, b = 2)</code> pass parameter with name.</li>
+</ul>
+<p>Define function with variable parameters, example</p>
+<pre><code>def name(var a, var b, var *c) {
+}</code></pre>
+<p>Then call, example</p>
+<pre><code>name(1,2,3,4,5,6,7,8,9);</code></pre>
+<p>In this function, parameter <code>a</code> is <code>1</code>, parameter <code>b</code> is <code>2</code>, and parameter <code>c</code> is <code>[3, 4, 5, 6, 7, 8, 9]</code>, all extra arguments will fill into <code>c</code> as an array.</p>
+<p>Define function with variable name parameters, example</p>
+<pre><code>def name(var a, var b, var **c) {
+}</code></pre>
+<p>Then call, example</p>
+<pre><code>name(1, 2, foo=100, bar=200);</code></pre>
+<p>In this function, parameter <code>a</code> is <code>1</code>, parameter <code>b</code> is <code>2</code>, and parameter <code>c</code> is <code>{'bar': 200, 'foo': 100}</code>, all extra arguments will fill into <code>c</code> as an dictionary.</p>
+<p>Function can have both variable parameters and variable name parameters, example</p>
+<pre><code>def name(var a, var b, var *c, var **d) {
+}</code></pre>
+<p>Call function with variable arguments, example</p>
+<pre><code>var a = [1,2];
+name(*a);</code></pre>
+<p><code>*a</code> will expand to two arguments pass to function, like follow example</p>
+<pre><code>name(1, 2);</code></pre>
+<p>Variable name arguments, example</p>
+<pre><code>var a = {'a': 1, 'b': 2};
+name(**a);</code></pre>
+<p><code>**a</code> will expand to two name arguments pass to function, like follow example</p>
+<pre><code>name(a = 1, b = 2);</code></pre>
+<p>Function name is optional, example</p>
+<pre><code>var f = def(var a) {print(a);};</code></pre>
+<p>Then you can use f call function.</p>
+<p>Function is expression.can be a argument, example</p>
+<pre><code>def hello(var f) {
+    f(100);
+}
+
+hello(def(var a){print(a);});</code></pre>
+<h4 id="local-variable-and-variable-scope">6.2 Local Variable and Variable Scope</h4>
+<p>Every declared variable in function only visible in function scope, example</p>
+<pre><code>def func() {
+    var a;
+    var b;
+    print(a, b);
+}</code></pre>
+<p>Variable <code>a</code> and variable <code>b</code> is the function local variable, they are only use in function scope (except closure).</p>
+<p>Function can has block scope, example</p>
+<pre><code>def func() {
+    var a;
+    {
+        var a;
+    }
+}</code></pre>
+<p>First <code>a</code> and second <code>a</code> is different variable, in second <code>a</code>’s block, will unable use first variable <code>a</code>.</p>
+<h4 id="nested-function-and-closure">6.3 Nested Function and Closure</h4>
+<p>Function can defined with in a function, example</p>
+<pre><code>def func1() {
+    def func2() {
+    }
+}</code></pre>
+<p>If return a function defined in this function, that make returned function to closure function, example</p>
+<pre><code>def func1(var a) {
+    def func2() {
+        print(a);
+    }
+    return func2;
+}</code></pre>
+<p>When call <code>func1(100)</code>, return value is <code>func2</code> with <code>a = 100</code> binding, and even func1 is returned, the variable <code>a</code> will still exist, because the <code>func2</code> have reference of <code>a</code>, variable <code>a</code> will useable until <code>func2</code> is destroyed.</p>
+<p>If call <code>func1</code> mutliple times, the <code>func1</code> will return different <code>func2</code> with different value binding, this is closure.</p>
+<h3 id="chapter-7---class">Chapter 7 - Class</h3>
+<h4 id="define-class">7.1 Define Class</h4>
+<p>Syntax</p>
+<pre><code>class Greeting {
+    var welcome = 'hello';
+
+    def greeting(var name) {
+        print(self.welcome, name);
+    }
+}</code></pre>
+<p>Define class without super class, lemon support multiple inherent, example</p>
+<pre><code>class Greeting(Hello, World) {
+}</code></pre>
+<p>Class Greeting inherent from Hello and World.</p>
+<p><code>var welcome</code> in class is class <code>Greeting</code> attribute, function <code>greeting</code> is class <code>Greeting</code> method. The class’s method can call from class (can’t use self) or class’s instance (can use self).</p>
+<p>Instance a class, example</p>
+<pre><code>var greeting = Greeting();</code></pre>
+<p><code>__init__</code> function, example</p>
+<pre><code>class Greeting {
+    def __init__(var name) {
+        self.name = name;
+    }
+}</code></pre>
+<p><code>__init__</code> will call after the instance create, arguments is passing to from class call, example</p>
+<pre><code>var greeting = Greeting('Zhicheng');</code></pre>
+<h4 id="class-attribute-and-instance-attribute">7.2 Class attribute and Instance Attribute</h4>
+<p>There are two different attribute the instance can have, class’s attribute and instance attribute, example</p>
+<pre><code>class Greeting {
+    var name = 'Stranger'; // class attribute
+    def greeting(var name) {
+        self.name = name; // instance attribute
+    }
+}</code></pre>
+<p>Instance’s attribute is set in self or instance variable, the class define attribute is always class’s attribute, example</p>
+<pre><code>var greeting1 = Greeting();
+print(greeting1.name); // class's attribute
+greeting1.greeting('Zhicheng');
+print(greeting1.name); // instance attribute, set by self.name = name
+
+var greeting2 = Greeting();
+print(greeting2.name); // still class's attribute
+greeting2.name = 'Zhicheng';
+print(greeting2.name); // instance's attribute</code></pre>
+<h4 id="inheritance-and-super-class">7.3 Inheritance and super class</h4>
+<p>When class define a method have a same name with it’s super class, that’s will overwrite super class’s method, but you can use super call super class methods, example</p>
+<pre><code>class A {
+    def hi() {
+        print(&quot;hi, I'm A&quot;);
+    }
+}
+
+class B(A) {
+    def hi() {
+        super.hi();  // call A's hi function
+        print(&quot;hi, I'm B&quot;);
+    }
+}</code></pre>
+<p>In multiple inherent class, can specific a super class function, example</p>
+<pre><code>class A {
+    def hi() {
+        print(&quot;hi, I'm A&quot;);
+    }
+}
+
+class B {
+    def hi() {
+        print(&quot;hi, I'm B&quot;);
+    }
+}
+
+class C(A, B) {
+    def hi() {
+        super(B).hi();  // call B's hi function
+        print(&quot;Hi, I'm C&quot;);
+    }
+}</code></pre>
+<h4 id="self-and-super-object">7.4 self and super object</h4>
+<p>In method <code>self</code> is reference instance of class. super can get super class’s method, in lemon function can dynamic assign, but the self’s binding will not change, example</p>
+<pre><code>class A {
+    def hi() {
+        print(&quot;hi, I'm A&quot;);
+    }
+}
+class B {
+    def hi() {
+        print(&quot;hi, I'm B&quot;);
+    }
+}
+var a = A();
+var b = B();
+
+a.hi = b.hi;
+a.hi();  // call B's hi();</code></pre>
+<p>And beware of reference type in class, this may cause some confuse, example</p>
+<pre><code>class A {
+    var names = [];
+}
+
+var a1 = A();
+a1.names.append('Zhicheng');
+
+var a2 = A();
+a2.names.append('John');
+print(a1.names);
+print(a2.names);</code></pre>
+<p>Both <code>a1.names</code> and <code>a2.names</code> is <code>['Zhicheng', 'John']</code>, because names is class A’s attribute. set instance’s attribute in <code>__init__</code> .</p>
+<h3 id="chapter-8---exception">Chapter 8 - Exception</h3>
+<h4 id="throw">8.1 throw</h4>
+<p>Syntax</p>
+<pre><code>throw expression;</code></pre>
+<p>Expression’s result need be a Exception object or instance of Exception’s subclass, example</p>
+<pre><code>class JustException(Exception) {
+}</code></pre>
+<h4 id="try-catch">8.2 try-catch</h4>
+<p>Syntax</p>
+<pre><code>try {
+    stmts1;
+} catch (ExceptionType e) {
+    stmts2
+} catch (Exception e) {
+    stmts4;
+} finally {
+    stmts5;
+}</code></pre>
+<p>The finally <code>stmts5</code> always run, after <code>stms1</code> or any of catch catched.the catch can only catch instance of <code>ExceptionType</code> or instance of <code>ExceptionType</code> subclass, the var <code>e</code> is instance of <code>Exception</code> throwed by <code>stmts1</code>. <code>catch (Exception e)</code> can catch all exceptions, otherwise try-catch will throw upper level try-catch.</p>
+<h4 id="exception-objects">8.2 Exception objects</h4>
+<ul>
+<li><code>TypeError</code> general type’s error.</li>
+<li><code>ItemError</code> any kind of use index or name access get items</li>
+<li><code>MemoryError</code> memory relative error.</li>
+<li><code>RuntimeError</code> virtual machine relative error.</li>
+<li><code>ArgumentError</code> arguments of function.</li>
+<li><code>AttributeError</code> get/set attribute relative error.</li>
+<li><code>ArithmeticError</code> arithmetic relative error.</li>
+<li><code>NotCallableError</code> called an not callable object.</li>
+<li><code>NotIterableError</code> iter a not iterable object.</li>
+<li><code>NotImplementedError</code> not implemented function or method.</li>
+</ul>
+<h3 id="chapter-9---import">Chapter 9 - Import</h3>
+<h4 id="import">9.1 import</h4>
+<p>Syntax</p>
+<pre><code>import 'hello.lm';
+import './hello.lm';
+import '../hello.lm';
+import '/Users/zhicheng/hello.lm';</code></pre>
+<p>Lemon have four path resolve,</p>
+<ul>
+<li>bare file, first search current working directory, if not found, search from LEMON_PATH.</li>
+<li>current file directory, <code>./hello.lm</code> search <code>hello.lm</code> in current file directory.</li>
+<li>current file parent directory, <code>../hello.lm</code> search <code>hello.lm</code> in current file parent directory.</li>
+<li>absolute path, import module from absolute path.</li>
+</ul>
+<h4 id="name-resolve">9.2 Name Resolve</h4>
+<p><code>import</code> support <code>as</code> to rename module, example</p>
+<pre><code>import 'hello.lm' as hello;</code></pre>
+<p>If no <code>as</code> in <code>import</code>, lemon will auto resolve module name, module’s file name will become module name, and change every unsupport character to <code>_</code> to emit a legal module name, example</p>
+<pre><code>import 'hello-world.lm';</code></pre>
+<p>Module <code>hello-world.lm</code> will named hello_world.</p>
+<h2 id="part-ii---advance-part">Part II - Advance Part</h2>
+<h3 id="chapter-10---accessor">Chapter 10 - Accessor</h3>
+<h4 id="setter-and-getter">10.1 setter and getter</h4>
+<p>Syntax:</p>
+<pre><code>def foo_getter(var x) {
+    return x + 1;
+}
+
+def foo_setter(var x) {
+    return x - 1;
+}
+
+@getter(foo_getter)
+@setter(foo_setter)
+var foo = 0;</code></pre>
+<p>Anytime get variable <code>foo</code>’s value, will call <code>foo_getter</code> and pass <code>foo</code>’s original value to parameter <code>x</code>, <code>foo_getter</code> return a new value, that will be variable <code>foo</code>’s expression value.</p>
+<p>Anytime(except in variable declare statement) assign <code>foo</code>’s value, will call <code>foo_setter</code> and pass new value to parameter <code>x</code>, <code>foo_setter</code> return a new value, that will be <code>foo</code>’s final value.</p>
+<p>You can set multiple getter and setter, they’ll execute from bottom-up. first getter get variable’s original value, after getter will get previous getter’s return value.</p>
+<p>The keyword <code>getter</code> is optional, example</p>
+<pre><code>def foo_getter(var x) {
+    return x;
+}
+
+@foo_getter
+var foo;</code></pre>
+<h4 id="basic-usage">10.2 basic usage</h4>
+<p>Examples</p>
+<pre><code>// have log of every time use variable
+def foo_logger(var x) {
+    // logging about x use
+    var x;
+}
+
+// make a variable readonly in getter way
+def readonly(var x) {
+    return x;
+}
+
+// make a variable readonly in setter way
+def readonly_setter(var x) {
+    throw TypeError('trying set readonly object');
+}</code></pre>
+<h4 id="advance-usage">10.3 advance usage</h4>
+<p>Example of use accessor as a type checker.</p>
+<pre><code>def typecheck(var type) {
+    return function(var x) {
+        if (!x.__instanceof__(type)) {
+            throw TypeError('wrong type');
+        }
+        return x;
+    };
+}
+
+@setter(typecheck(integer))
+var a = 10;
+
+a = 20; // ok
+
+a = 'hello'; // not ok</code></pre>
+<h3 id="chapter-11---iterator">Chapter 11 - Iterator</h3>
+<h4 id="iterator-object-and-iterable-object">11.1 Iterator object and iterable object</h4>
+<p>In <code>for-in</code> loop, not only collection type, any iterator object or iterable object can use as right value, example</p>
+<pre><code>class Range {
+    def __init__(var max) {
+        self.max = max;
+    }
+
+    def __iterator__() {
+        self.value = 0;
+        return self;
+    }
+
+    def __next__() {
+        if (self.value == self.max) {
+            return sentinel;
+        }
+        var value = self.value;
+        self.value += 1;
+        return value;
+    }
+}
+
+for (var a in Range(11)) {
+    print(a);
+}</code></pre>
+<p>output</p>
+<pre><code>0
+1
+2
+3
+4
+5
+6
+7
+8
+9</code></pre>
+<p>First call <code>__iterator__</code> get iterable object, then call <code>__next__</code> and every iter, until <code>__next__</code> return <code>sentinel</code> stop iterator.</p>
+<p>Iterator object is used by builtin object like array and dictionary.</p>
+<h3 id="chapter-12---coroutine">Chapter 12 - Coroutine</h3>
+<h4 id="yield-function.">12.1 yield function.</h4>
+<p><code>yield</code> function can dynamic make a function become a coroutine, example</p>
+<pre><code>def hi() {
+    yield(1);
+    yield(2);
+}
+
+var co = hi();
+print(co.current());
+co.resume();
+print(co.current());</code></pre>
+<p>output</p>
+<pre><code>1
+2</code></pre>
+<h4 id="resume-and-transfer">12.2 resume and transfer</h4>
+<p><code>resume</code> and <code>transfer</code> both can continue run coroutine, but <code>resume</code> will returned to caller, <code>transfer</code> will transfer current coroutine’s execute context to another coroutine, so <code>transfer</code> can only call with in coroutine, transfer example <a href="https://en.wikipedia.org/wiki/Coroutine">Coroutine - Wikipedia</a></p>
+<pre><code>var q = array();
+
+var p;
+var c;
+var n = 0;
+def produce() {
+    yield(0);
+    while (true) {
+        print(&quot;produce&quot;);
+        q.append(n);
+        c.transfer();
+    }
+}
+def consume() {
+    yield(0);
+    while (true) {
+        print(&quot;consume&quot;);
+        var a = q.pop();
+        p.transfer();
+    }
+}
+p = produce();
+c = consume();
+p.resume();</code></pre>
+<h3 id="chapter-13---continuation">Chapter 13 - Continuation</h3>
+<h4 id="callcc-function.">13.1 callcc function.</h4>
+<p><code>callcc</code> is call-with-current-continuation <a href="https://en.wikipedia.org/wiki/Call-with-current-continuation" class="uri">https://en.wikipedia.org/wiki/Call-with-current-continuation</a></p>
+<p><code>callcc</code> take a function argument and call it with a continuation argument, the continuation can restart function with <code>callcc</code>’s position, example</p>
+<pre><code>var cont;
+
+def f() {
+    print(1);
+    callcc(function(var cc) { cont = cc; }));
+    print(2);
+}
+
+f(); // output 1 , 2
+cont(); // output 2</code></pre>
+<h4 id="demo">13.2 Demo</h4>
+<p>Demo from wikipedia. <a href="https://en.wikipedia.org/wiki/Continuation">Continuation - Wikipedia</a></p>
+<pre><code>var the_continuation;
+
+def test() {
+    var i = 0;
+    callcc(function(var k){the_continuation = k;});
+    i += 1;
+    return i;
+}
+print(test());
+
+print(the_continuation());
+print(the_continuation());
+
+var another_continuation = the_continuation;
+
+print(test());
+print(the_continuation());
+print(another_continuation());</code></pre>
+<h2 id="part-iii---the-c-api">Part III - The C API</h2>
+<h3 id="chapter-14---input-and-compile">Chapter 14 - Input and Compile</h3>
+<h4 id="initialize-and-set-parameter">14.1 initialize and set parameter</h4>
+<p>Example from <code>main.c</code></p>
+<pre><code>struct lemon *lemon;
+lemon = lemon_create();
+builtin_init(lemon);
+
+lobject_set_item(lemon, 
+         lemon-&gt;l_modules,
+         lstring_create(lemon, &quot;os&quot;, 2),
+         os_module(lemon));
+lemon_input_set_file(lemon, &quot;code.lm&quot;);
+lemon_compile(lemon);
+lemon_machine_reset(lemon);
+lemon_machine_execute(lemon);</code></pre>
+<p>For simple reason I don’t add error check, check <code>main.c</code> for error check version.</p>
+<p>Everything start with <code>lemon_create()</code>, this function initialize all party of lemon, and required object. after <code>lemon_create</code> initialize module with <code>builtin_init</code>, and manual initialize <code>os_module</code>, there is the place you add custom module. use <code>lemon_input_set_file</code> set lemon source code file or <code>lemon_input_set_buffer</code> set source code from string instead file. use <code>lemon_compile</code> compile source code, use <code>lemon_machine_reset</code> reset machine and finally <code>lemon_machine_execute</code> execute code. all part is done.</p>
+<h3 id="chapter-15---the-virtual-machine">Chapter 15 - The Virtual Machine</h3>
+<h4 id="execute-and-execute_loop">15.1 execute and execute_loop</h4>
+<p>There are two execute function in lemon virtual machine, <code>main.c</code> use <code>lemon_machine_execute</code> and <code>shell.c</code> use <code>lemon_machine_execute_loop</code>, the different between is the <code>lemon_machine_execute</code> will clean up virtual machine’s stack and frame. <code>lemon_machine_execute_loop</code> only execute code, the state of virtual machine will keep at code finished state.</p>
+<h4 id="frame-object">15.2 frame object</h4>
+<p><code>frame</code> is most important object in lemon. It’s record the current call context, local variables. There are two type of <code>frame</code></p>
+<ol type="1">
+<li>lemon object frame</li>
+<li>C function frame</li>
+</ol>
+<p>C function used by C callable object, because the frame will not returned by <code>return</code> opcode, so sometime need manual call <code>lemon_machine_return_frame</code>.</p>
+<p>and frame also can use to capture values, example</p>
+<pre><code>struct lobject *
+callback(struct lemon *lemon,
+     struct lframe *frame,
+     struct lobject *retval)
+{
+    /* use of previous function's return value */   
+    return retval;
+}
+
+frame = lemon_machine_push_new_frame(lemon, 
+    NULL, NULL, callback, 0);
+/* call object */
+retval = lobject_call(lemon, callable, argc, argv);
+/*
+ * call lemon_machine_return_frame if needed, retval is returned from call object
+ */
+// lemon_machine_return_frame(lemon, retval)</code></pre>
+<h4 id="pause-frame">15.3 pause frame</h4>
+<p>There’s also a special frame, <code>pause frame</code>, <code>lemon_machine_execute_loop</code> will return if meet <code>pause frame</code>, example</p>
+<pre><code>struct lframe *pause;
+pause = lemon_machine_add_pause(lemon);
+
+lobject_call(lemon, callable, argc, argv);
+retval = lemon_machine_execute_loop(lemon);
+lemon_machine_del_pause(lemon, pause);</code></pre>
+<p>This is design for C function call lemon function and need return value from function. if return value is not urgant, regular frame can do the trick.</p>
+<h3 id="chapter-16---create-function-and-type">Chapter 16 - Create Function and Type</h3>
+<h4 id="c-function-demo.">16.1 C function demo.</h4>
+<p>Create a C function in lemon only need one c function, example</p>
+<pre><code>static struct lobject *
+hello(struct lemon *lemon,
+      struct lobject *self,
+      int argc, struct lobject *argv[])
+{
+    printf(&quot;hello,world\n&quot;);
+    return lemon-&gt;l_nil; // this is required
+}</code></pre>
+<p>And add function to lemon before compile.</p>
+<pre><code>const char *cstr = &quot;hello&quot;;
+struct lobject *name = lstring_create(lemon, cstr, strlen(cstr));
+struct lobject *function = lfunction_create(lemon, name, NULL, hello);
+lemon_add_global(lemon, cstr, function);</code></pre>
+<h4 id="object-demo">16.2 object demo</h4>
+<p>Create a new object required a structure and a function, example</p>
+<pre><code>struct an_object {
+    struct lobject object;
+};
+
+static struct lobject *
+an_object_method(struct lemon *lemon,
+         struct lobject *self,
+         int method, int argc,
+         struct lobject *argv[])
+{
+    switch (method) {
+    case LOBJECT_METHOD_STRING:
+        return lstring_create(lemon, &quot;an_object&quot;, 8);
+
+    default:
+        return lobject_default(lemon, self, method, argc, argv);
+    }
+}</code></pre>
+<p>Create object use <code>lobject_create</code> ,example</p>
+<pre><code>struct lobject *object = lobject_create(lemon,
+    sizeof(struct an_object), an_object_method);</code></pre>
+<p>All <code>LOBJECT_METHOD_XXX</code> defined in <code>lobject.h</code>. More example please check lemon’s source code.</p>
+<p>This work is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</p>
+</body>
+</html>

@@ -1,0 +1,160 @@
+0: const 25 ; <module 'main'> 
+5: module 1 590
+11: const 26 ; <module 'src'> 
+16: store 0 0
+19: const 26 ; <module 'src'> 
+24: module 6 590
+30: const 27 ; 221492336 
+35: store 0 0
+38: const 28 ; next 
+43: define 0 0 0 0 80
+52: load 1 0
+55: const 29 ; 3735928559 
+60: mul
+61: const 30 ; 2974593325 
+66: add
+67: const 31 ; 4294967295 
+72: mod
+73: store 1 0
+76: load 1 0
+79: return
+80: store 0 1
+83: const 32 ; n 
+88: const 33 ; __init__ 
+93: define 0 0 1 2 377
+102: array 0
+107: self
+108: const 34 ; enc 
+113: setattr
+114: array 0
+119: self
+120: const 35 ; flag 
+125: setattr
+126: const 36 ; 330150339 
+131: const 37 ; 665229750 
+136: const 38 ; 1030425184 
+141: const 39 ; 626644061 
+146: const 40 ; 861166604 
+151: const 41 ; 521761774 
+156: const 42 ; 586337393 
+161: const 43 ; 167708778 
+166: const 44 ; 495518230 
+171: const 45 ; 459905620 
+176: const 46 ; 47689903 
+181: const 47 ; 541128627 
+186: const 48 ; 735310319 
+191: const 49 ; 924471115 
+196: const 50 ; 66957703 
+201: const 51 ; 827308967 
+206: const 52 ; 4680810 
+211: const 53 ; 618187854 
+216: const 54 ; 1041878913 
+221: const 55 ; 424705310 
+226: const 56 ; 258515107 
+231: const 57 ; 301365991 
+236: const 58 ; 238089888 
+241: const 59 ; 126810196 
+246: const 60 ; 160092960 
+251: const 61 ; 333469062 
+256: const 62 ; 524809386 
+261: const 63 ; 334234642 
+266: const 64 ; 532732060 
+271: const 65 ; 701306806 
+276: const 66 ; 755999918 
+281: const 67 ; 219942343 
+286: const 68 ; 37219027 
+291: const 69 ; 76267819 
+296: const 70 ; 2141786733 
+301: array 35
+306: self
+307: const 71 ; res 
+312: setattr
+313: const 72 ; 0 
+318: store 0 1
+321: load 0 1
+324: load 0 0
+327: lt
+328: jz 371
+333: self
+334: const 34 ; enc 
+339: getattr
+340: const 73 ; append 
+345: getattr
+346: load 1 1
+349: call 0
+351: call 1
+353: pop
+354: load 0 1
+357: const 74 ; 1 
+362: add
+363: store 0 1
+366: jmp 321
+371: const 75 ; nil 
+376: return
+377: const 33 ; __init__ 
+382: const 76 ; x 
+387: const 77 ; y 
+392: const 78 ; sign 
+397: define 0 0 2 3 482
+406: const 72 ; 0 
+411: store 0 2
+414: load 0 2
+417: const 79 ; 35 
+422: lt
+423: jz 476
+428: self
+429: const 35 ; flag 
+434: getattr
+435: const 73 ; append 
+440: getattr
+441: load 0 0
+444: load 0 2
+447: getitem
+448: load 0 1
+451: load 0 2
+454: getitem
+455: bxor
+456: call 1
+458: pop
+459: load 0 2
+462: const 74 ; 1 
+467: add
+468: store 0 2
+471: jmp 414
+476: const 75 ; nil 
+481: return
+482: const 78 ; sign 
+487: const 80 ; RunMe 
+492: class 4 0
+495: store 0 2
+498: const 23 ; <function 'print'> 
+503: const 81 ; [+] Starting... 
+508: call 1
+510: pop
+511: load 0 2
+514: const 79 ; 35 
+519: call 1
+521: store 0 5
+524: load 0 5
+527: const 78 ; sign 
+532: getattr
+533: load 0 5
+536: const 71 ; res 
+541: getattr
+542: load 0 5
+545: const 34 ; enc 
+550: getattr
+551: call 2
+553: pop
+554: const 23 ; <function 'print'> 
+559: load 0 5
+562: const 35 ; flag 
+567: getattr
+568: call 1
+570: pop
+571: const 23 ; <function 'print'> 
+576: const 82 ; [+] Done! 
+581: call 1
+583: pop
+584: const 75 ; nil 
+589: return

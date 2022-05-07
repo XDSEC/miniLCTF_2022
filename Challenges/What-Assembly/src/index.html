@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> MiniLctf-2022 </title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <header>
+            <h1>MiniLctf-2022-Web-Rev-Challenge</h1>
+        </header>
+        <form class="form">
+            <div class="form--block">
+                <input class="form--block-text"
+                       id="miniL"
+                       key="D33.B4T0"
+                       enc="05779c24d9249e693fa7ac4a10c68dfbd3520083b33f56e90fd84978b6a15c970b976779a8fefe91fb87d2221c9a1f87ed7eaddb8ae6370f9de69e3a7a5c5c488cde79756b0b9f1713e749edd41cff04"
+                       onerror="alert('Wrong flag!');"
+                       onsuccess="alert('Correct flag!');">
+                <label for="flag" id="label-flag">Flag here</label>
+                <div></div>
+            </div>
+            <div class="form--block">
+                <button id="check">CHECK! </button>
+            </div>
+        </form>
+            <script src="flag.js"></script>
+        <script>
+         Module.onRuntimeInitialized = () => Module._init();
+        </script>
+    </body>
+</html>
