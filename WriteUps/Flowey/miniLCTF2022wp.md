@@ -1524,33 +1524,13 @@ https://xdsec.org/flag.html 即
 
 ## Paralympics | Hana | done
 
->Powered by ue4 engine
+用 ue viewer 看 pak 文件
 
-运行 Paralympics.exe 发现第一人称躺在床上，窗户上写着
-
- press "Space" to change pose
- 
- btw, this is the only thing you can do
- 
- because you are disabled my dear
-
-旁边桌子上摆了一个奖杯，下面有一行字
-
- first prize of the Paralympic
-
-推测是将第一人称的坐标改到奖杯附近
-
->因为在 Arch Linux (XDSEC及各大高校开源社区使用率最高的发行版）上跑 wine 非常灵车的原因,一开始（到最后也是）程序内渲染出了问题，场景完全是黑白（一度以为它本应该是黑白的）的且难以认清上述文字，所以十分艰难
->
->其实开始用 CE 乱改 value 的时候导致了部分模型在特定视角下消失，但是因为 wine 的问题，本来应该看到 flag 的地方是黑糊糊一片
->
->教训：下次比赛应该买一台计算机专门装 Windows 跑闭源特斯拉
-
-用 ue4 viewer 拆 pak 文件看 3D 模型拿到的某个模型是半个flag `-9th-4R7-`
+/Game/Meshes/StaticMesh.uasset 是半个flag `-9th-4R7-`
 
 然后就拿到了半个flag
 
-用 Cheat Engine 扫 Paralympics.exe 反复扫 changed/unchanged value, 确定决定坐标的value，然后乱改到奖杯的位置即可看到
+>用 CE 乱改 value 的时候导致了部分模型在特定视角下消失，于是看到了 flag 
 
 `miniLCTF{Ch4m-9th-4R7-p01N}`
 
@@ -1559,15 +1539,3 @@ https://xdsec.org/flag.html 即
 填完问卷得
 
 `miniLCTF{Th4nk5_F0R_Y0UR_P4rt1c1p4t1ng!}`
-
----
-# 后记
-## Hana的碎碎念
-
-miniLCTF2022 是咱第三次打（摸鱼）CTF相关，前两次分别是 USTCLUG 的 Hackergame2021 和 XDSEC 的 抗疫CTF，比起前两次做了一大半 Misc，这次真丢人（
-
-因为个人有在做 riscv 方面的实习，我就是组里那个上来就升级 glibc（还有musl，gcc）的新人（然后被骂了呜呜） 
-
-
-
-
