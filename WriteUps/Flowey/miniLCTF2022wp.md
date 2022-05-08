@@ -1613,7 +1613,7 @@ T(org.springframework.cglib.core.ReflectUtils).defineClass("demo",T(com.sun.org.
 
 # checkin | hahaha | done
 
-放出源码后一开始没看明白，但 token 值肯定是最重要的，去搜索 go 加密，感觉 CBC 和源文件很像，仔细了解真的是，由此写出 exp：
+放出源码后一开始没看明白，但 token 值肯定是最重要的，去搜索 go 加密，感觉 CBC，AES和源文件很像，仔细了解真的是，由此写出 exp：
 
 ```python
 # -*- coding: UTF-8 -*-
@@ -1683,9 +1683,11 @@ https://xdsec.org/flag.html 即
 
 >用 CE 乱改 value 的时候导致了部分模型在特定视角下消失，于是看到了 flag 
 
-导出 mesh 可以看到
+实际上是用 CE 扫出来决定位置的 value ，然后改到奖杯那里，然后可以看到 flag
 
 `miniLCTF{Ch4m-9th-4R7-p01N}`
+
+> 某位开始纠结 1/l 0/O 的问题，但是一般 1337 肯定是改字符的多一些啦
 
 # 问卷题 | Hana | done
 
