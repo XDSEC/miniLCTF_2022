@@ -141,7 +141,7 @@ for 循环之前是一些初始化和打印信息. 循环内部根据打印的�
 
 程序开启了 canary, 需要想办法绕过. 注意到我们可以通过 rank 向栈任意(也不是那么任意, 最远到 $2^{16}$, 不过也足够了) 位置写入数据. 而这个 `vuln` 函数是在线程中运行的.
 
-程序在创建线程时, 线程会被分配新的栈, 然后把 [线程本地存储]^(Thread Local Storage) 压入栈顶, 同时设置寄存器 fs(32 位是寄存器 gs) 的值为 TLS 的地址. 然后执行线程函数. TLS 的结构如下:
+程序在创建线程时, 线程会被分配新的栈, 然后把 **线程本地存储 (Thread Local Storage)** 压入栈顶, 同时设置寄存器 fs(32 位是寄存器 gs) 的值为 TLS 的地址. 然后执行线程函数. TLS 的结构如下:
 
 ```c
 typedef struct
@@ -580,7 +580,7 @@ void fcn.0000123d(void)
 
 看到了 prctl 函数, ~~搜索一下~~发现是沙箱机制.
 
-[沙箱]^(sandbox) 是过禁用系统调用. 假如禁用了 execve 系统调用. 那么就不能简单写 `execve("/bin/sh", NULL, NULL)` shellcode 来获得 shell 了.
+**沙箱 (sandbox)** 机制用来禁用系统调用. 假如禁用了 execve 系统调用. 那么就不能简单写 `execve("/bin/sh", NULL, NULL)` shellcode 来获得 shell 了.
 
 使用 seccomp-tools 可以查看能够使用的系统调用:
 
@@ -945,8 +945,6 @@ print(s.recv(100))
 ```
 
 ## RE
-
-被 twin 打怕了, 结束前一天开的 lemon, 好在写出来了.
 
 ### lemon \| Wings
 
