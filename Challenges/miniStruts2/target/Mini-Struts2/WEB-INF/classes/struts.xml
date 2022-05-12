@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="false"/>
+
+    <package name="ctf-minil" extends="struts-default">
+
+        <default-action-ref name="index"/>
+
+        <global-results>
+            <result name="error">/400.jsp</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+
+        <action name="login" class="ctf.minil.actions.LoginAction" method="execute">
+            <result name="error">/400.jsp</result>
+            <result name="login" type="redirect">index.action</result>
+            <result name="success">/login.jsp</result>
+        </action>
+
+        <action name="index" class="ctf.minil.actions.IndexAction" method="execute">
+            <result name="error">/400.jsp</result>
+            <result name="login" type="redirect">login.action</result>
+            <result name="success">/index.jsp</result>
+        </action>
+
+    </package>
+
+
+</struts>
