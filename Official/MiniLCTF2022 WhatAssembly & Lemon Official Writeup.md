@@ -1,4 +1,6 @@
-# MiniLCTF2022 WhatAssembly & Lemon Official Writeup
+# MiniLCTF2022 WhatAssembly & Lemon & NotRC4 Official Writeup
+
+>    ———— track & avalon
 
 ## Lemon | 8 Solves
 
@@ -548,8 +550,274 @@ for j in range(0, len(enc), 16):
         QUAROUrev(state, 14, 10, 6, 2)
         QUAROUrev(state, 13, 9, 5, 1)
         QUAROUrev(state, 12, 8, 4, 0)
-        
+
     print(bytes(state))
+```
+
+## NotRC4 | 8 Solves
+
+### Topic idea
+
+risc-v 简易虚拟机实现简单分组加密
+
+### Source Code
+
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#define OPCODE_N 5
+#define FLAG_LEN 16
+#define ROL(value, bits) ((value << bits) | (value >> (sizeof(value) * 8 - bits)))
+#define ROR(value, bits) ((value >> bits) | (value << (sizeof(value) * 8 - bits)))
+unsigned long int k[2] = {0x64627421, 0x79796473};
+// flag == I_hate_U_r1sc-V!
+unsigned char vm_code[] = {
+    0xf3, 0, 0xf4, 0xe1, 0xf4, 0xe2, 0xf2, 4, 11, 0xf5,
+    0xf3, 2, 0xf4, 0xe1, 0xf4, 0xe2, 0xf2, 4, 11, 0xf5,
+    0xf1, 0xff};
+unsigned long int cipher[4] = {0x4bc21dbb95ef82ca, 0xf57becae71b547be, 0x80a1bdab15e7f6cd, 0xa3c793d7e1776385};
+unsigned long int final[4] = {};
+unsigned long int ipt[4] = {};
+typedef struct vm_signal
+{
+    unsigned char opcode;
+    void (*handler)(void *);
+} vm_signal;
+typedef struct vm_cpu
+{
+    int eip;
+    unsigned long int X;
+    unsigned long int Y;
+    vm_signal op_list[OPCODE_N];
+} vm_cpu;
+int loop_cnt = 0;
+int final_cnt = 0;
+void my_check(vm_cpu *cpu);
+void my_loop(vm_cpu *cpu);
+void my_rol(vm_cpu *cpu);
+void my_add(vm_cpu *cpu);
+void my_push(vm_cpu *cpu);
+void vm_init(vm_cpu *cpu)
+{
+    cpu->eip = 0;
+
+    cpu->op_list[0].opcode = 0xf1;
+    cpu->op_list[0].handler = my_check;
+
+    cpu->op_list[1].opcode = 0xf2;
+    cpu->op_list[1].handler = my_loop;
+
+    cpu->op_list[2].opcode = 0xf3;
+    cpu->op_list[2].handler = my_add;
+
+    cpu->op_list[3].opcode = 0xf4;
+    cpu->op_list[3].handler = my_rol;
+
+    cpu->op_list[4].opcode = 0xf5;
+    cpu->op_list[4].handler = my_push;
+}
+void vm_dispatcher(vm_cpu *cpu)
+{
+    for (int i = 0; i < OPCODE_N; i++)
+    {
+        if (vm_code[(cpu->eip)] == cpu->op_list[i].opcode)
+        {
+            (cpu->op_list[i]).handler(cpu);
+            break;
+        }
+    }
+}
+void vm_start(vm_cpu *cpu)
+{
+    while (vm_code[(cpu->eip)] != 0xff)
+    {
+        vm_dispatcher(cpu);
+    }
+}
+void my_add(vm_cpu *cpu)
+{
+
+    cpu->X = ipt[vm_code[(cpu->eip) + 1]] + k[0];
+    cpu->Y = ipt[vm_code[(cpu->eip) + 1] + 1] + k[1];
+    cpu->eip += 2;
+}
+void my_rol(vm_cpu *cpu)
+{
+    if (vm_code[(cpu->eip) + 1] == 0xe1)
+    {
+        cpu->X = ROL((cpu->X ^ cpu->Y), cpu->Y) + k[0];
+    }
+    if (vm_code[(cpu->eip) + 1] == 0xe2)
+    {
+        cpu->Y = ROL((cpu->X ^ cpu->Y), cpu->X) + k[1];
+    }
+    cpu->eip += 2;
+}
+void my_push(vm_cpu *cpu)
+{
+    final[final_cnt] = cpu->X;
+    final[final_cnt + 1] = cpu->Y;
+    cpu->X = 0;
+    cpu->Y = 0;
+    final_cnt += 2;
+    cpu->eip += 1;
+}
+void my_check(vm_cpu *cpu)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (final[i] != cipher[i])
+        {
+            printf("Wrong!");
+            exit(0);
+        }
+    }
+    cpu->eip += 1;
+}
+void my_loop(vm_cpu *cpu)
+{
+    // printf("%x %x %x",vm_code[cpu->eip],vm_code[(cpu->eip)+1],vm_code[(cpu->eip)+2]);
+
+    if (loop_cnt < vm_code[(cpu->eip) + 2])
+    {
+        cpu->eip -= vm_code[(cpu->eip) + 1];
+        // printf("%x",vm_code[cpu->eip]);
+        loop_cnt++;
+        // printf("Loop %d\t",loop_cnt);
+    }
+    else
+    {
+        loop_cnt = 0;
+        cpu->eip += 3;
+    }
+}
+int main()
+{
+    vm_cpu cpu = {0};
+    puts("Input your flag");
+    scanf("%16s", ipt);
+    vm_init(&cpu);
+    vm_start(&cpu);
+    printf("Right!");
+    return 0;
+}
+```
+
+### How to Reverse
+
+逆向risc-v架构工具很多，这里选择使用ghidra进行静态分析
+
+找到main函数
+
+```cpp
+  FUN_00100740("Input your flag",0);
+  FUN_00100720(&DAT_00100d78,&DAT_001020e8);
+  FUN_00100828(&local_80);
+  FUN_00100934(&local_80);
+  FUN_00100760("Right!");
+  uVar1 = 0;
+  if (__stack_chk_guard != local_18) {
+    FUN_00100730(0);
+  }
+```
+
+简单分析`FUN_00100828(&local_80);FUN_00100934(&local_80);`两个函数
+
+```cpp
+void FUN_00100828(undefined4 *param_1)
+
+{
+  *param_1 = 0;
+  *(undefined *)(param_1 + 6) = 0xf1;
+  *(undefined **)(param_1 + 8) = &LAB_00100b7e;
+  *(undefined *)(param_1 + 10) = 0xf2;
+  *(undefined **)(param_1 + 0xc) = &LAB_00100bfe;
+  *(undefined *)(param_1 + 0xe) = 0xf3;
+  *(undefined **)(param_1 + 0x10) = &LAB_00100974;
+  *(undefined *)(param_1 + 0x12) = 0xf4;
+  *(undefined **)(param_1 + 0x14) = &LAB_00100a10;
+  *(undefined *)(param_1 + 0x16) = 0xf5;
+  *(undefined **)(param_1 + 0x18) = &LAB_00100af0;
+  return;
+}
+```
+
+可知此为vm_init,得出虚拟机基本逻辑
+
+```python
+if vmcode == 0xf1:
+    check()
+elif vmcode == 0xf2:
+    loop()
+elif vmcode == 0xf3:
+    enc_init()
+elif vmcode == 0xf4:
+    enc()
+elif vmcode == 0xf5:
+    push()
+elif vmcode == 0xff:
+    vm_end()
+```
+
+```cpp
+void FUN_001008ba(int *param_1)
+
+{
+  int local_14;
+
+  local_14 = 0;
+  while( true ) {
+    if (4 < local_14) {
+      return;
+    }
+    if ((&DAT_00102018)[*param_1] == *(char *)(param_1 + ((longlong)local_14 + 1) * 4 + 2)) break;
+    local_14 = local_14 + 1;
+  }
+  (**(code **)(param_1 + ((longlong)local_14 + 1) * 4 + 4))
+            (param_1,*(code **)(param_1 + ((longlong)local_14 + 1) * 4 + 4));
+  return;
+}
+```
+
+此为vm_start,通过这个函数可以获得vmcode所在，接下来只需要根据vmcode分析出加密逻辑即可。加密逻辑是一个魔改的RC5分组加密，没加key_generate，选择使用两个常量作为变量，根据check()找到cipher，写出解密函数即可
+
+### Decrypt
+
+```cpp
+#include <stdio.h>
+
+#define ROL(value, bits) ((value << bits) | (value >> (sizeof(value) * 8 - bits)))
+#define ROR(value, bits) ((value >> bits) | (value << (sizeof(value) * 8 - bits)))
+unsigned long int k_1 = 0x64627421;
+unsigned long int k_2 = 0x79796473;
+
+void Decipher(unsigned long int *In, unsigned long int *Out)
+{
+    int i = 0, j;
+    unsigned long int X, Y;
+    for (j = 0; j < 4; j += 2)
+    {
+        X = In[j];
+        Y = In[j + 1];
+        for (i = 12; i > 0; i--)
+        {
+            Y = ROR(Y - k_2, X) ^ X;
+            X = ROR(X - k_1, Y) ^ Y;
+        }
+        Out[j] = X - k_1;
+        Out[j + 1] = Y - k_2;
+    }
+}
+int main(int argc, char const *argv[])
+{
+    unsigned long int out[4] = {};
+    unsigned long int cipher[4] = {0x4bc21dbb95ef82ca, 0xf57becae71b547be, 0x80a1bdab15e7f6cd, 0xa3c793d7e1776385};
+    Decipher(cipher, out);
+    puts(out);
+    return 0;
+}
 ```
 
 # Afterword
